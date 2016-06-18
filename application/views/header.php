@@ -44,7 +44,7 @@
                                     <i class="fa fa-bars"></i>
                                 </button>
                                 <a class="navbar-brand page-scroll" href="#page-top">
-                                    <i class="fa fa-play-circle"></i>  <span class="light">Mdrive</span> File Sharing
+                                    <i class="fa fa-dropbox"></i><span class="light">&nbsp;<?php echo (isset($data['title']) ? $data['title'] : "Mdrive File Sharing") ?></span>
                                 </a>
                             </div>
 
@@ -56,7 +56,7 @@
                                         <a href="#page-top"></a>
                                     </li>
                                     <li>
-                                        <a class="page-scroll" href="#about">Home</a>
+                                        <a class="page-scroll" href="<?php echo base_url();?>">Home</a>
                                     </li>
                                     <li>
                                         <a class="page-scroll" href="#about">Files</a>
@@ -69,9 +69,6 @@
                             <!-- /.navbar-collapse -->
                         </div>
                         <!-- /.container -->
-
-
-
                     </div>
                 </nav>
             </div>
@@ -84,3 +81,10 @@
 
     <!-- container starts -->
     <div class="container">
+        <?php if(has_alert()): ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <?php show_alert();?>
+                </div>
+            </div>
+        <?php endif; ?>

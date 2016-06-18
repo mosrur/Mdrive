@@ -32,35 +32,49 @@ class Account extends CI_Controller {
      * Handle the user signup
      */
     public function signup() {
-        $data['title'] = 'Sign up | News Portal';
+        $data['title'] = 'Sign up | Mdrive';
 
-        $this->form_validation->set_rules('email', 'email', 'required|valid_email|is_unique[users.email]');
+        $this->form_validation->set_rules('firstname', 'First name', 'required');
+        $this->form_validation->set_rules('lastname', 'Last name', 'required');
+        $this->form_validation->set_rules('username', 'Username', 'required|min_length[6]|is_unique[user.username]');
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
+        $this->form_validation->set_rules('passconf', 'Password Confirmation', 'required|matches[password]');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[user.email]');
+
 
         if($this->form_validation->run()) {
-            $signup_email = $this->input->post('email', TRUE);
-            $new_user = $this->user->create($signup_email);
+
+            $firstname = $this->input->post('firstname');
+            $lastname = $this->input->post('lastname');
+            $signup_email = $this->input->post('email');
+            $username = $this->input->post('username');
+            $password = $this->input->post('password');
+
+
+            $new_user = $this->user->setUser($firstname, $lastname, $signup_email, $username, $password);
             if($new_user && $new_user > 0) {
                 if($this->user->notify($new_user, 'new_signup')) {
-                    $this->template->alert(
+
+                    set_alert(
                         'Thank you for joining us. We have sent you an email with instructions about activating your account. Please make sure to check the spam folder.',
                         'success'
                     );
                 } else {
-                    $this->template->alert(
+                    set_alert(
                         'Could not send the activation email. Please contact administrator.',
                         'warning'
                     );
                 }
-                redirect(base_url());
+                redirect('Account/signin');
                 return;
             } else {
-                $this->template->alert(
+                set_alert(
                     'Sorry! Sign up was unsuccessful. Please try again or contact administrator.',
                     'danger'
                 );
             }
         }
-        $this->template->view('signup');
+        $this->load->view('signup');
     }
 
     /**
@@ -80,7 +94,7 @@ class Account extends CI_Controller {
         }
 
         if(!is_logged_in()) {
-            $this->load->view('home', $data);
+            $this->load->view('signin', $data);
             return;
         }
 
@@ -94,6 +108,62 @@ class Account extends CI_Controller {
     public function logout() {
         $this->user->logout();
         redirect(base_url());
+    }
+
+    /**
+     * Handles account activation using the key sent via email
+     * Lets user set the password for the first time
+     * @param $key
+     */
+    public function activate($key) {
+        $data['title'] = 'Activate account | News Portal';
+        $this->load->model('user_model', 'um');
+
+        $current_user = $this->um->get_by_key($key);
+        $data['user'] = $current_user;
+        $data['key'] = $key;
+
+        if(!$current_user) {
+            $this->template->alert(
+                'Invalid token provided.',
+                'warning'
+            );
+            redirect(base_url());
+            return;
+        }
+
+        $this->form_validation->set_rules('password', 'password', 'trim|required|min_length[6]|md5');
+        $this->form_validation->set_rules('conf_password', 'password confirmation', 'trim|required|md5|matches[password]');
+
+        if($this->input->method(TRUE) == 'POST' && ($this->input->post('key') != $key || $this->input->post('iduser') != $current_user->iduser)) {
+            $this->template->alert(
+                'Form spoofing detected.',
+                'warning'
+            );
+            redirect(base_url());
+            return;
+        }
+
+        if($this->input->method(TRUE) == 'POST' && $this->form_validation->run()) {
+            if($this->user->activate($key, $current_user->iduser, $this->input->post('password'))) {
+                $this->user->notify($current_user->iduser, 'welcome');
+                $this->template->alert(
+                    'Your account has been activated. Please log in using the form below.',
+                    'success'
+                );
+                redirect('account/login');
+                return;
+            } else {
+                $this->template->alert(
+                    'Could not activate account. Please contact administrator.',
+                    'warning'
+                );
+                redirect(base_url());
+                return;
+            }
+        }
+
+        $this->template->view('account/set_password', $data);
     }
 
 

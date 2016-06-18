@@ -35,28 +35,36 @@
                         'class' => 'address_info'
                 );
 
-                echo form_fieldset('User Signin', $form_fieldset);
+                echo form_fieldset('Signin', $form_fieldset);
                 ?>
 
 
+                <?php if(validation_errors()): ?>
+                    <div class="alert alert-danger">
+                        <?php echo validation_errors();?>
+                    </div>
+                <?php endif; ?>
+
+                <?php echo form_open('account/signin'); ?>
+
                 <!-- username -->
                 <div class="form-group">
-                    <?php echo form_label('Username', 'username', 'class="form-group"'); ?>
-                    <?php echo form_input('username');?>
+                    <?php //echo form_label('Username', 'username'); ?>
+                    <?php echo form_input('username', '', 'class="form-control" placeholder="Username"');?>
                 </div>
 
                 <!-- password -->
                 <div class="form-group">
-                    <?php echo form_label('Password', 'password', 'class="form-group"'); ?>
-                    <?php echo form_password('firstname');?>
+                    <?php //echo form_label('Password', 'password'); ?>
+                    <?php echo form_password('password', '', 'class="form-control" placeholder="Passowrd"');?>
                 </div>
 
                 <!-- form submit -->
-                <?php echo form_submit('form-submit', 'Sign in!'); ?>
+                <?php echo form_submit('form-submit', 'Sign in!', 'class="btn btn-default"'); ?>
 
-                <!-- fieldset close -->
-                <?php echo form_label('&nbsp;', '&nbsp;'); ?>
-                <?php echo form_fieldset_close();?>
+                <?php echo form_close();?>
+
+                <!-- eof login box -->
 
 
             <?php echo form_close();?>

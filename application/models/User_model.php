@@ -2,7 +2,7 @@
 
 /**
  * Model to handle user related actions
- * @author: Mohboob Chowdhury
+ * @author: Mosrur Chowdhury
  * @url: http://mosrur.com
  **/
 class User_model extends CI_Model {
@@ -10,6 +10,7 @@ class User_model extends CI_Model {
     private $default_table = 'user';
 
     public function add($data) {
+
         if($this->db->insert($this->default_table, $data)){
             return $this->db->insert_id();
         }

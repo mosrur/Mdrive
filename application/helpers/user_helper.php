@@ -18,3 +18,11 @@ if(!function_exists('is_logged_in')) {
     }
 }
 
+if(!function_exists('generate_validation_code')) {
+    function generate_validation_code($email) {
+        return strrev(md5(strrev($email) . time() . rand()));
+    }
+}
+
+
+

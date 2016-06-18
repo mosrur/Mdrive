@@ -20,7 +20,7 @@
         <!-- Footer -->
         <footer>
             <div class="container text-center">
-                <p>Copyright &copy; Your Website 2014</p>
+                <p>Copyright &copy; <?php echo (isset($data['title']) ? $data['title'] : "Mdrive File Sharing") ?> 2016</p>
             </div>
         </footer>
     </div>
