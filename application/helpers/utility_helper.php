@@ -36,3 +36,9 @@ function has_alert(){
 
     return !empty($alerts);
 }
+
+if(!function_exists('generate_file_code')) {
+    function generate_file_code($data) {
+        return strrev(md5(strrev($data) . time() . rand()));
+    }
+}

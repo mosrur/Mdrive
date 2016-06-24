@@ -16,7 +16,9 @@ class User
     function __construct(){
         // Assigning CodeIgniter object to $this->ci
         $this->ci =& get_instance();
+        $this->default_table = 'user';
     }
+
 
     /**
      * Check if current user is logged in
@@ -30,56 +32,34 @@ class User
         return FALSE;
     }
 
+
     /**
-     * User Login
-     * @param $username and $password for login
-     * @return mixed user object or bool
-     */
-    public function Login($username, $password){
-
-        // Select user details
-        $user = $this->ci->db
-            ->where('username', $username)
-            ->where('password', $password)
-            ->get($this->default_table);
-
-        // user result check
-        if ($user->num_rows() != 1)
-        {
-            return FALSE;
+     * Login user and set session etc.
+     * @param login_name: login name posted by user
+     * @param password: password posted by user
+     * @return bool
+     * */
+    public function login($login_name = null, $password = null) {
+        if(!empty($login_name) && !empty($password)){
+            $this->ci->load->model('user_model', 'um');
+            if($user_data = $this->ci->um->signin(array('username' => $login_name, 'password' => $password))){
+                $this->ci->session->set_userdata(array('user_data' => $user_data));
+                return TRUE;
+            }
         }
-
-        // Set the user details
-        $user_details = $user->row();
-
-        // Set the userdata for the current user
-        if($this->ci->setUser($user_details->username, $user_details->id)){
-
-            return TRUE;
-        }
-
-
+        return FALSE;
     }
 
     /**
-     * User Logout
-     * @param $email string the email address of user
-     * @return mixed user object or bool
+     * Log the user out
+     * @return bool
      */
-    public function Logout(){
-
-        // Remove userdata
-        $this->ci->session->unset_userdata('identifier');
-        $this->ci->session->unset_userdata('username');
-        $this->ci->session->unset_userdata('logged_in');
-
-        // Set logged out userdata
-        $this->ci->session->set_userdata(array(
-            'logged_out' => $_SERVER['REQUEST_TIME']
-        ));
-
-        // Return true
-        return TRUE;
+    public function logout() {
+        if($this->loggedIn()){
+            $this->ci->session->unset_userdata('user_data');
+            return TRUE;
+        }
+        return FALSE;
     }
 
     /**

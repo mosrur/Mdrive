@@ -45,7 +45,7 @@ class User_model extends CI_Model {
 
     public function signin($data) {
         if(!isset($data['status'])) {
-            $data['status'] = 1;
+            $data['status'] = 'Active';
         }
 
         $user = $this->db->get_where($this->default_table, $data, 1);
@@ -57,8 +57,8 @@ class User_model extends CI_Model {
         if(isset($user_data['password'])) {
             unset($user_data['password']);
         }
-        if(isset($user_data['code'])) {
-            unset($user_data['code']);
+        if(isset($user_data['key'])) {
+            unset($user_data['key']);
         }
 
         return $user_data;

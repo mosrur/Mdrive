@@ -30,7 +30,7 @@
 <![endif]-->
 </head>
 <body>
-<div class="wrapper">
+
     <header class="container header-wrapper">
         <div class="row">
             <div class="col-md-12">
@@ -71,13 +71,12 @@
                         <!-- /.container -->
                     </div>
                 </nav>
+
             </div>
         </div>
     </header>
 
-    <div style="height: 100px;">
-        &nbsp;
-    </div>
+    <div style="height: 100px;;"></div>
 
     <!-- container starts -->
     <div class="container">
@@ -88,3 +87,4 @@
                 </div>
             </div>
         <?php endif; ?>
+

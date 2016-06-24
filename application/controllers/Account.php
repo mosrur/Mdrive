@@ -81,12 +81,12 @@ class Account extends CI_Controller {
      * Handle user Signin
      */
     public function signin() {
-        $data['title'] = 'Log in | News Portal';
+        $data['title'] = 'Log in | Mdrive File Sharing';
 
-        $this->form_validation->set_rules('username', 'Username', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'trim|required|md5');
+        $this->form_validation->set_rules('username', 'username', 'required');
+        $this->form_validation->set_rules('password', 'password', 'trim|required|md5');
 
-        if($this->input->method(TRUE) == 'POST' && $this->form_validation->run()) {
+        if($this->input->method(TRUE) == 'POST' && $this->form_validation->run() && !$this->user->login($this->input->post('username'), $this->input->post('password'))) {
             $this->template->alert(
                 'Credentials did not match',
                 'danger'
@@ -94,7 +94,7 @@ class Account extends CI_Controller {
         }
 
         if(!is_logged_in()) {
-            $this->load->view('signin', $data);
+            $this->template->view('account/login', $data);
             return;
         }
 
