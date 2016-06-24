@@ -27,7 +27,7 @@ if(!function_exists('generate_validation_code')) {
 if(!function_exists('get_userid')) {
     function get_userid(){
         $ci =& get_instance();
-        return $ci->session->userdata('iduser');
+        return $ci->session->userdata('user_data')['iduser'];
     }
 }
 

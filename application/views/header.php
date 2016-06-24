@@ -56,14 +56,19 @@
                                         <a href="#page-top"></a>
                                     </li>
                                     <li>
-                                        <a class="page-scroll" href="<?php echo base_url();?>">Home</a>
+                                        <a class="page-scroll" href="<?php echo site_url();?>">Home</a>
                                     </li>
                                     <li>
-                                        <a class="page-scroll" href="#about">Files</a>
+                                        <a class="page-scroll" href="<?php echo site_url('file');?>">Files</a>
                                     </li>
                                     <li>
                                         <a class="page-scroll" href="#contact">Contact</a>
                                     </li>
+                                    <?php if(is_logged_in()): ?>
+                                    <li>
+                                        <a class="page-scroll" href="<?php echo site_url('Account/signout'); ?>">Signout</a>
+                                    </li>
+                                    <?php endif; ?>
                                 </ul>
                             </div>
                             <!-- /.navbar-collapse -->

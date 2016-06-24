@@ -41,6 +41,14 @@ class User_model extends CI_Model {
         return $user->row();
     }
 
+    public function get_by_key($key) {
+        $user = $this->db->get_where($this->default_table, array('key' => $key), 1);
+        if(!$user) {
+            return FALSE;
+        }
+        return $user->row();
+    }
+
 
 
     public function signin($data) {

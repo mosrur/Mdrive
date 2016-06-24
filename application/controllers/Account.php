@@ -87,14 +87,14 @@ class Account extends CI_Controller {
         $this->form_validation->set_rules('password', 'password', 'trim|required|md5');
 
         if($this->input->method(TRUE) == 'POST' && $this->form_validation->run() && !$this->user->login($this->input->post('username'), $this->input->post('password'))) {
-            $this->template->alert(
+            set_alert(
                 'Credentials did not match',
                 'danger'
             );
         }
 
         if(!is_logged_in()) {
-            $this->template->view('account/login', $data);
+            $this->load->view('signin', $data);
             return;
         }
 
@@ -105,7 +105,7 @@ class Account extends CI_Controller {
     /**
      * Log the user out of the system
      */
-    public function logout() {
+    public function signout() {
         $this->user->logout();
         redirect(base_url());
     }
@@ -123,8 +123,13 @@ class Account extends CI_Controller {
         $data['user'] = $current_user;
         $data['key'] = $key;
 
+        echo '<pre>';
+        print_r($current_user);
+        echo '</pre>';
+
+
         if(!$current_user) {
-            $this->template->alert(
+            set_alert(
                 'Invalid token provided.',
                 'warning'
             );
@@ -132,38 +137,24 @@ class Account extends CI_Controller {
             return;
         }
 
-        $this->form_validation->set_rules('password', 'password', 'trim|required|min_length[6]|md5');
-        $this->form_validation->set_rules('conf_password', 'password confirmation', 'trim|required|md5|matches[password]');
-
-        if($this->input->method(TRUE) == 'POST' && ($this->input->post('key') != $key || $this->input->post('iduser') != $current_user->iduser)) {
-            $this->template->alert(
-                'Form spoofing detected.',
+        if($this->user->activate($key, $current_user->iduser)) {
+            $this->user->notify($current_user->iduser, 'welcome');
+            set_alert(
+                'Your account has been activated. Please log in using the form below.',
+                'success'
+            );
+            redirect('account/signin');
+            return;
+        } else {
+            set_alert(
+                'Could not activate account. Please contact administrator.',
                 'warning'
             );
             redirect(base_url());
             return;
         }
 
-        if($this->input->method(TRUE) == 'POST' && $this->form_validation->run()) {
-            if($this->user->activate($key, $current_user->iduser, $this->input->post('password'))) {
-                $this->user->notify($current_user->iduser, 'welcome');
-                $this->template->alert(
-                    'Your account has been activated. Please log in using the form below.',
-                    'success'
-                );
-                redirect('account/login');
-                return;
-            } else {
-                $this->template->alert(
-                    'Could not activate account. Please contact administrator.',
-                    'warning'
-                );
-                redirect(base_url());
-                return;
-            }
-        }
-
-        $this->template->view('account/set_password', $data);
+        $this->template->view('account/signin', $data);
     }
 
 

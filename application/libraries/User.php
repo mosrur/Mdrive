@@ -118,11 +118,11 @@ class User
      * @param string $notification
      * @return bool
      */
-    public function activate($key, $iduser, $password) {
+    public function activate($key, $iduser) {
         $this->ci->load->model('user_model', 'um');
         $current_user = $this->ci->um->get_by_key($key);
         if($current_user->iduser == $iduser) {
-            return $this->ci->um->update(array('password' => $password, 'status' => 1, 'edit_date' => date('Y-m-d H:i:s'), 'edited_by' => 'web'), array('iduser' => $iduser));
+            return $this->ci->um->update(array('status' => 'Active', 'edited' => date('Y-m-d H:i:s'), 'edited_by' => 'web'), array('iduser' => $iduser));
         }
         return FALSE;
     }
