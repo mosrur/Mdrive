@@ -140,3 +140,14 @@
 }
 
 /* eof login page */
+
+.share-box{
+    display: none;
+    width: 300px;
+    padding: 5px 10px;
+    font-size: 80%;
+    border: 1px solid #ccc;
+    background: #ffffff;
+    cursor: copy;
+    word-wrap: break-word;
+}

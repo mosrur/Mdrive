@@ -22,7 +22,7 @@
 <!-- Google Fonts -->
 <link href='http://fonts.googleapis.com/css?family=Josefin+Slab:400,700|Dancing+Script|Open+Sans:400,300italic,300,400italic' rel='stylesheet' type='text/css'>
 
-<link rel="stylesheet" href="<?php echo base_url('css/style.css'); ?>" type="text/css" />
+<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>" type="text/css" />
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -64,7 +64,7 @@
                                     </li>
 
                                     <li>
-                                        <a class="page-scroll" href="<?php echo site_url('Account/signout'); ?>">Signout</a>
+                                        <a class="page-scroll" href="<?php echo site_url('Account/signout'); ?>">Sign out</a>
                                     </li>
                                     <?php endif; ?>
                                 </ul>
