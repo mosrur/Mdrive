@@ -164,8 +164,8 @@ class Account extends CI_Controller {
 
         $this->form_validation->set_rules('firstname', 'First name', 'required');
         $this->form_validation->set_rules('lastname', 'Last name', 'required');
-        $this->form_validation->set_rules('username', 'Username', 'required|min_length[6]|is_unique[user.username]');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[user.email]');
+        $this->form_validation->set_rules('username', 'Username', 'required|min_length[6]');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         if(!empty($this->input->post('password')) && !empty($this->input->post('passconf'))){
             $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
             $this->form_validation->set_rules('passconf', 'Password Confirmation', 'required|matches[password]');
@@ -182,7 +182,7 @@ class Account extends CI_Controller {
                 $password = $this->input->post('password');
                 $user_profile = $this->user->updateUser($firstname, $lastname, $signup_email, $username, $password);
             } else {
-                $user_profile = $this->user->updateUser($firstname, $lastname, $signup_email, $username);
+                $user_profile = $this->user->updateUser($iduser, $firstname, $lastname, $signup_email, $username);
             }
 
 
@@ -191,7 +191,7 @@ class Account extends CI_Controller {
                     'Profile update was successful. Thank you for being with us.',
                     'success'
                 );
-                redirect('Account/signin');
+                redirect('Account/profile_update');
                 return;
             } else {
                 set_alert(

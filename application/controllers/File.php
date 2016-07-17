@@ -100,24 +100,28 @@ class File extends CI_Controller
             return;
         }
 
-        if($downld_file->permission == 'Private')
-        {
-            $update = $this->fm->update(
-                array(
-                    'permission' => 'Public'
-                ),
-                array(
-                    'idfile'     => $downld_file->idfile
-                )
-            );
+        $new_permission = 'Private';
 
-            if($update){
-                set_alert(
-                    'File permission updated successfully.',
-                    'success'
-                );
-            }
+        if($downld_file->permission == 'Private') {
+            $new_permission = 'Public';
         }
+
+        $update = $this->fm->update(
+            array(
+                'permission' => $new_permission
+            ),
+            array(
+                'idfile'     => $downld_file->idfile
+            )
+        );
+
+        if($update){
+            set_alert(
+                'File permission updated successfully.',
+                'success'
+            );
+        }
+
         redirect('File');
 
     }
@@ -130,6 +134,17 @@ class File extends CI_Controller
         if(!$downld_file){
             set_alert('Invalid file request.','danger');
             redirect(base_url());
+            return;
+        }
+
+        if($downld_file->permission == 'Private'){
+            set_alert(
+                'File is not available.',
+                'warning'
+            );
+
+            redirect(base_url());
+
             return;
         }
         $this->load->config('file');

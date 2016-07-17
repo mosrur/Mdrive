@@ -115,8 +115,11 @@ class User
             'lastname'      => $lastname,
             'email'         => $email,
             'username'      => $username,
-            'modified'      => date("Y-m-d H:i:s")
+            'edited'      => date("Y-m-d H:i:s")
         );
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
 
         $usr_data = $this->ci->um->update(
             $data,

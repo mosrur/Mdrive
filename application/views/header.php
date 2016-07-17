@@ -44,7 +44,7 @@
                                     <i class="fa fa-bars"></i>
                                 </button>
                                 <a class="navbar-brand page-scroll" href="#page-top">
-                                    <i class="fa fa-dropbox"></i><span class="light">&nbsp;<?php echo (isset($data['title']) ? $data['title'] : "Mdrive File Sharing") ?></span>
+                                    <i class="fa fa-cloud-download"></i><span class="light">&nbsp;<?php echo (isset($data['title']) ? $data['title'] : "Mdrive File Sharing") ?></span>
                                 </a>
                             </div>
 
