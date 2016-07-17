@@ -27,7 +27,8 @@
                     <tr>
                         <th>#</th>
                         <th>Title</th>
-                        <th>File Path</th>
+                        <th>File Permission</th>
+                        <th>Modified</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -40,10 +41,13 @@
                                     <?php echo $data['title'];?>
                                 </td>
                                 <td>
-                                    <a href="<?php echo $data['key'];?>"><?php echo $data['key'];?></a>
+                                    <?php echo $data['permission'];?>&nbsp;|&nbsp;<a href="<?php echo site_url('file/change_permission/'.$data['key']);?>">Change permission</a>
                                 </td>
                                 <td>
-                                    <a href="<?php echo site_url('file/download/'.$data['key']);?>">Download</a>&nbsp;|&nbsp;<a href="file/delete">Delete</a>
+                                    <?php echo (empty($data['modified'])? " - " : $data['modified']);?>
+                                </td>
+                                <td>
+                                    <a href="<?php echo site_url('file/download/'.$data['key']);?>">Download</a>&nbsp;|&nbsp;<a href="file/delete">Delete</a><?php echo ($data['permission']=='Public'? "&nbsp;|&nbsp;<a href=".site_url('file/share/'.$data['key']).">Share</a>":'');?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

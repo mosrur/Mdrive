@@ -55,16 +55,14 @@
                                     <li class="hidden">
                                         <a href="#page-top"></a>
                                     </li>
+                                    <?php if(is_logged_in()): ?>
                                     <li>
-                                        <a class="page-scroll" href="<?php echo site_url();?>">Home</a>
+                                        <a class="page-scroll" href="<?php echo site_url('Account/profile_update');?>">Profile</a>
                                     </li>
                                     <li>
                                         <a class="page-scroll" href="<?php echo site_url('file');?>">Files</a>
                                     </li>
-                                    <li>
-                                        <a class="page-scroll" href="#contact">Contact</a>
-                                    </li>
-                                    <?php if(is_logged_in()): ?>
+
                                     <li>
                                         <a class="page-scroll" href="<?php echo site_url('Account/signout'); ?>">Signout</a>
                                     </li>

@@ -13,6 +13,7 @@ class Account extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->library('form_validation');
+        $this->load->model('user_model', 'um');
     }
 
     /**
@@ -22,7 +23,7 @@ class Account extends CI_Controller {
         $data['title'] = 'User Account | Mdrive';
 
         if(!is_logged_in()) {
-            redirect('user/login');
+            redirect('account/signin');
             return;
         }
 
@@ -117,16 +118,10 @@ class Account extends CI_Controller {
      */
     public function activate($key) {
         $data['title'] = 'Activate account | News Portal';
-        $this->load->model('user_model', 'um');
 
         $current_user = $this->um->get_by_key($key);
         $data['user'] = $current_user;
         $data['key'] = $key;
-
-        echo '<pre>';
-        print_r($current_user);
-        echo '</pre>';
-
 
         if(!$current_user) {
             set_alert(
@@ -156,6 +151,58 @@ class Account extends CI_Controller {
 
         $this->template->view('account/signin', $data);
     }
+
+    /**
+     * Handle the user profile update
+     */
+    public function profile_update() {
+        $data['title'] = 'User profile update | Mdrive';
+
+        $iduser = $this->session->userdata('user_data')['iduser'];
+
+        $data['user'] = $this->um->get($iduser);
+
+        $this->form_validation->set_rules('firstname', 'First name', 'required');
+        $this->form_validation->set_rules('lastname', 'Last name', 'required');
+        $this->form_validation->set_rules('username', 'Username', 'required|min_length[6]|is_unique[user.username]');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[user.email]');
+        if(!empty($this->input->post('password')) && !empty($this->input->post('passconf'))){
+            $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
+            $this->form_validation->set_rules('passconf', 'Password Confirmation', 'required|matches[password]');
+        }
+
+
+        if($this->input->method(TRUE) == 'POST' && $this->form_validation->run()) {
+
+            $firstname = $this->input->post('firstname');
+            $lastname = $this->input->post('lastname');
+            $signup_email = $this->input->post('email');
+            $username = $this->input->post('username');
+            if(!empty($this->input->post('password')) && !empty($this->input->post('passconf'))){
+                $password = $this->input->post('password');
+                $user_profile = $this->user->updateUser($firstname, $lastname, $signup_email, $username, $password);
+            } else {
+                $user_profile = $this->user->updateUser($firstname, $lastname, $signup_email, $username);
+            }
+
+
+            if($user_profile && $user_profile > 0) {
+                set_alert(
+                    'Profile update was successful. Thank you for being with us.',
+                    'success'
+                );
+                redirect('Account/signin');
+                return;
+            } else {
+                set_alert(
+                    'Sorry! User profile update was unsuccessful. Please try again or contact administrator.',
+                    'danger'
+                );
+            }
+        }
+        $this->load->view('profile_update', $data);
+    }
+
 
 
 }

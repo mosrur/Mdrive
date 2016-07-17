@@ -1,6 +1,6 @@
 <?php
 /**
- * home.php - the index file
+ * file_upload.php - file uploading
  *
  * @package: Mdrive.
  * @author: Mosrur Chowdhury
@@ -14,7 +14,7 @@
 
     <div class="row">
         <!-- the contents goes here -->
-        <div class="col-md-12">
+        <div class="col-md-6 col-md-offset-3">
 
                 <!-- File upload form -->
 

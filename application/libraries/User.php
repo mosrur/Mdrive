@@ -100,6 +100,34 @@ class User
         );
     }
 
+    /**
+     * Update user data
+     * @return mixed user object or bool
+     */
+    public function updateUser($iduser, $firstname, $lastname, $email, $username, $password = false) {
+        $this->ci->load->model('user_model', 'um');
+        if($password){
+            $data = array('password' => md5($password));
+        };
+
+        $data = array(
+            'firstname'     => $firstname,
+            'lastname'      => $lastname,
+            'email'         => $email,
+            'username'      => $username,
+            'modified'      => date("Y-m-d H:i:s")
+        );
+
+        $usr_data = $this->ci->um->update(
+            $data,
+            array(
+                'iduser'    => $iduser
+            )
+        );
+
+        return $usr_data;
+    }
+
     public function isLoggedin(){
         // Return boolean based on session data
         return (bool) $this->ci->session->userdata('username');
