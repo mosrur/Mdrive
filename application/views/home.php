@@ -32,7 +32,7 @@
                 'class' => 'address_info'
             );
 
-            echo form_fieldset('Signin', $form_fieldset);
+            echo form_fieldset('Signup', $form_fieldset);
             ?>
 
 
